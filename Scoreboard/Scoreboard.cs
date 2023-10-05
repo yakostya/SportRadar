@@ -17,8 +17,9 @@
 
         public IList<Match> GetSummary()
         {
-            _matches.Sort();
-            return _matches;
+            var matches = _matches.ToList();
+            matches.Sort();
+            return matches;
         }
 
         public void Dispose()
