@@ -54,12 +54,12 @@
             var totalScore = Home.Score + Away.Score;
             var otherTotalScore = other.Home.Score + other.Away.Score;
 
-            if (totalScore > otherTotalScore)
+            if (totalScore == otherTotalScore)
             {
-                return -1;
+                return StartTime.CompareTo(other.StartTime);
             }
 
-            return StartTime.CompareTo(other.StartTime);
+            return totalScore > otherTotalScore ? -1 : 1;
         }
     }
 }
