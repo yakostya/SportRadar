@@ -10,7 +10,7 @@
 
         public event EventHandler Finished = delegate { };
 
-        public Match(Team home, Team away)
+        internal Match(Team home, Team away)
         {
             if (home == null)
             {
@@ -26,7 +26,7 @@
             Away = new TeamScore(away, 0);
         }
 
-        public Match Start()
+        internal Match Start()
         {
             if (StartTime.HasValue)
             {
