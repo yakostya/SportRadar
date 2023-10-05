@@ -12,11 +12,11 @@ namespace Scoreboard.Tests
             var mexicoCanada = scoreboard.Start(new Team("Mexico"), new Team("Canada"))
                                          .UpdateScore(0, 5);
 
-            var uruguayItaly = scoreboard.Start(new Team("Uruguay"), new Team("Italy"))
-                .UpdateScore(6, 6);
-
             var spainBrazil = scoreboard.Start(new Team("Spain"), new Team("Brazil"))
                 .UpdateScore(10, 2);
+
+            var uruguayItaly = scoreboard.Start(new Team("Uruguay"), new Team("Italy"))
+                .UpdateScore(6, 6);
 
             var argentinaAustralia = scoreboard.Start(new Team("Argentina"), new Team("Australia"))
                 .UpdateScore(3, 1);
@@ -30,9 +30,8 @@ namespace Scoreboard.Tests
                 uruguayItaly,
                 spainBrazil,
                 mexicoCanada,
-                argentinaAustralia,
                 germanyFrance,
-                
+                argentinaAustralia,
             }, options => options.WithStrictOrdering(),
                 "Expecting matches to be returned in described order");
         }

@@ -5,11 +5,10 @@
         public TeamScore Home { get; }
         public TeamScore Away { get; }
 
-        public DateTimeOffset StartTime { get; private set; }
-        public DateTimeOffset? EndTime { get; private set; }
+        public DateTimeOffset? StartTime { get; private set; }
+        public DateTimeOffset? FinishTime { get; private set; }
 
         public event EventHandler Finished = delegate { };
-        public event EventHandler Updated = delegate { };
 
         public Match(Team home, Team away)
         {
@@ -28,23 +27,19 @@
             Home.Score = home;
             Away.Score = away;
 
-            Updated.Invoke(this, EventArgs.Empty);
-
             return this;
         }
 
         public Match Finish()
         {
-            EndTime = DateTimeOffset.UtcNow;
+            FinishTime = DateTimeOffset.UtcNow;
             Finished.Invoke(this, EventArgs.Empty);
 
             return this;
         }
 
         public override string ToString()
-        {
-            return $"{Home.Team.Name} {Home.Score} - {Away.Team.Name} {Away.Score}";
-        }
+            => $"{Home.Team.Name} {Home.Score} - {Away.Team.Name} {Away.Score}";
 
         public int CompareTo(Match? other)
         {
@@ -56,7 +51,8 @@
 
             if (totalScore == otherTotalScore)
             {
-                return StartTime.CompareTo(other.StartTime);
+                return other.StartTime.GetValueOrDefault()
+                    .CompareTo(StartTime.GetValueOrDefault());
             }
 
             return totalScore > otherTotalScore ? -1 : 1;
