@@ -5,10 +5,54 @@ namespace Scoreboard.Tests
 {
     public class MatchTests
     {
+
+        [Fact]
+        public void Start_InvalidCondition_ThrowsError()
+        {
+            var match1 = Matches.MexicoCanada();
+            match1.Start();
+            match1.Finish();
+            var startOnAlreadyFinish = () => match1.Start();
+
+            startOnAlreadyFinish.Should().Throw<InvalidOperationException>();
+
+            var match2 = Matches.MexicoCanada();
+            match2.Start();
+            var startOnStartedMatch = () => match2.Start();
+
+            startOnStartedMatch.Should().Throw<InvalidOperationException>();
+        }
+
+        [Fact]
+        public void Finish_InvalidCondition_ThrowsError()
+        {
+            var match1 = Matches.MexicoCanada();
+            var finishOnNotStartedMatch = () => match1.Finish();
+
+            finishOnNotStartedMatch.Should().Throw<InvalidOperationException>();
+
+            var match2 = Matches.MexicoCanada();
+            match2.Start();
+            match2.Finish();
+            var finishOnAlreadyFinished = () => match1.Finish();
+            finishOnAlreadyFinished.Should().Throw<InvalidOperationException>();
+        }
+
+        [Fact]
+        public void Ctor_NullValues_ThrowsException()
+        {
+            var underTest = () => { var _ = new Match(null, new Team("Mexico")); };
+            underTest.Should().Throw<ArgumentNullException>();
+
+            underTest = () => { var _ = new Match(new Team("Mexico"), null); };
+            underTest.Should().Throw<ArgumentNullException>();
+        }
+
         [Fact]
         public void Finish_GenerateEvent()
         {
-            var match = Matches.MexicoCanada();
+            var match = Matches.MexicoCanada()
+                .Start();
             var monitored = match.Monitor();
 
             match.Finish();
@@ -18,7 +62,8 @@ namespace Scoreboard.Tests
         [Fact]
         public void Finish_ShouldSetFinishTime()
         {
-            var match = Matches.MexicoCanada();
+            var match = Matches.MexicoCanada()
+                .Start();
             match.FinishTime.Should().Be(null);
             match.Finish();
 

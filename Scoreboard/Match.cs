@@ -12,26 +12,61 @@
 
         public Match(Team home, Team away)
         {
+            if (home == null)
+            {
+                throw new ArgumentNullException(nameof(home));
+            }
+
+            if (away == null)
+            {
+                throw new ArgumentNullException(nameof(away));
+            }
+
             Home = new TeamScore(home, 0);
             Away = new TeamScore(away, 0);
         }
 
         public Match Start()
         {
+            if (StartTime.HasValue)
+            {
+                throw new InvalidOperationException($"Match is already started at {StartTime}. Can't start it again.");
+            }
+
+            if (FinishTime.HasValue)
+            {
+                throw new InvalidOperationException($"Match is already finished at {FinishTime}. Can't start it again.");
+            }
+
             StartTime = DateTimeOffset.UtcNow;
             return this;
         }
 
         public Match UpdateScore(int home, int away)
         {
-            Home.Score = home;
-            Away.Score = away;
+            if (!StartTime.HasValue)
+            {
+                throw new InvalidOperationException($"Match is not started yet. Please call {nameof(Start)} first.");
+            }
+
+            Home.UpdateScore(home);
+            Away.UpdateScore(away);
 
             return this;
         }
 
         public Match Finish()
         {
+            if (!StartTime.HasValue)
+            {
+                throw new InvalidOperationException($"Match is not started yet. Please call {nameof(Start)} first.");
+            }
+
+            if (FinishTime.HasValue)
+            {
+                throw new InvalidOperationException($"Match is already finished at {FinishTime}. Can't finish it again.");
+            }
+
             FinishTime = DateTimeOffset.UtcNow;
             Finished.Invoke(this, EventArgs.Empty);
 
