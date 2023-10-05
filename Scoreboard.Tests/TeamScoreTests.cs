@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Scoreboard.Tests
@@ -34,6 +35,17 @@ namespace Scoreboard.Tests
         {
             var underTest = () => { new TeamScore(new Team("Mexico"), 0).UpdateScore(value); };
             underTest.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
+        public void UpdateScore_DecreaseScore_DoNotThrowAnyExceptions()
+        {
+            var score = new TeamScore(new Team("Mexico"), 0);
+            score.UpdateScore(10);
+
+            var underTest = () => { score.UpdateScore(2); };
+            underTest.Should().NotThrow();
+
         }
     }
 }
