@@ -14,5 +14,14 @@ namespace Scoreboard.Tests
             var underTest = () => { var _ = new Team(name); };
             underTest.Should().Throw<ArgumentNullException>();
         }
+
+        [Theory]
+        [InlineData("Mexico")]
+        [InlineData("Canada")]
+        public void Ctor_NonEmptyValues_ShouldCreateTeamWithProvidedName(string name)
+        {
+            var team = new Team(name);
+            team.Name.Should().BeEquivalentTo(name);
+        }
     }
 }

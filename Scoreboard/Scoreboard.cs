@@ -28,6 +28,8 @@
             {
                 match.Finished -= MatchOnFinished;
             }
+
+            _matches.Clear();
         }
 
         private void MatchOnFinished(object? sender, EventArgs e)

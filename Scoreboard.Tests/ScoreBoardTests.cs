@@ -6,7 +6,7 @@ namespace Scoreboard.Tests
     public class ScoreBoardTests
     {
         [Fact]
-        public void GetSummary_StartSomeMatches_ReturnsOrderedByTotalScore()
+        public void GetSummary_StartSomeMatches_ReturnsOrderedByTotalScoreAndTime()
         {
             using var scoreboard = new Scoreboard();
             var mexicoCanada = scoreboard.Start(new Team("Mexico"), new Team("Canada"))
@@ -66,6 +66,22 @@ namespace Scoreboard.Tests
             },
                 options => options.WithStrictOrdering(),
                 "Expecting matches to be returned in described order");
+        }
+
+        [Fact]
+        public void Dispose_ShouldUnsubscribeFromFinishedEvent()
+        {
+            var scoreboard = new Scoreboard();
+            var mexicoCanada = scoreboard.Start(new Team("Mexico"), new Team("Canada"))
+                .UpdateScore(0, 5);
+
+            var uruguayItaly = scoreboard.Start(new Team("Uruguay"), new Team("Italy"))
+                .UpdateScore(6, 6)
+                .Finish();
+           
+            scoreboard.Dispose();
+
+            scoreboard.GetSummary().Should().BeEmpty();
         }
     }
 }
