@@ -12,8 +12,8 @@
 
         public Match(Team home, Team away)
         {
-            Home = new TeamScore { Team = home, Score = 0 };
-            Away = new TeamScore { Team = away, Score = 0 };
+            Home = new TeamScore(home, 0);
+            Away = new TeamScore(away, 0);
         }
 
         public Match Start()
